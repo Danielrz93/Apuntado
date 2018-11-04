@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Name="popupLoadingView" 
+    x:Class="Apuntado.Views.NewGamePage"
+    BindingContext="{Binding Main, Source={StaticResource Locator}}"
+    Padding="10, 0" 
+    IsVisible="false" 
+    AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+    AbsoluteLayout.LayoutFlags="All"
+    BackgroundColor="#C0808080" >
+    <ContentView.Content>
+        <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+            <StackLayout Orientation="Vertical" HeightRequest="150" WidthRequest="200" BackgroundColor="White">
+                <ActivityIndicator x:Name="activityIndicator" Margin="0,50,0,0" VerticalOptions="Center" HorizontalOptions="Center" Color="Black" WidthRequest="30" HeightRequest="30" ></ActivityIndicator>
+                <Label x:Name="lblLoadingText" TextColor="Black" VerticalOptions="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" Text="Loading..."></Label>
+            </StackLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
