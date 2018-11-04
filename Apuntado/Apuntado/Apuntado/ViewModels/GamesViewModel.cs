@@ -15,13 +15,14 @@
 
         #region Attriubutes
         public ObservableCollection<GamesItemsModel> games;
-        private Sqlite sqlcon;
+        public Sqlite sqlcon;
         public bool isRunning;
         private bool refreshCommand;
         private bool isVisiblePop;
         private bool isRefreshing;
         private MainViewModel mainViewModel;
         private string gameName;
+        private int scoreNew;
         private string msggError;       
         #endregion
 
@@ -45,6 +46,11 @@
         {
             get { return this.gameName; }
             set { SetValue(ref this.gameName, value); }
+        }
+        public int ScoreNew
+        {
+            get { return this.scoreNew; }
+            set { SetValue(ref this.scoreNew, value); }
         }
         public string MsggError
         {
@@ -71,6 +77,7 @@
             this.LoadGames();
             this.IsVisiblePop = false;
             this.IsRefreshing = false;
+            this.ScoreNew = 101;
         }        
         #endregion
 
@@ -93,14 +100,16 @@
             sqlcon.CreateTable<Games>();
 
         }
+
         private IEnumerable<GamesItemsModel> ToGamesItemsModel()
         {
             // Transformar la lista Games a GamesItemsModel que hereda Games del Model
             return mainViewModel.GamesList.Select(g => new GamesItemsModel
             {
                 IdGame = g.IdGame,
-                Name   = g.Name,
-                Date   = g.Date
+                Name = g.Name,
+                Date = g.Date,
+                ScoreMax = g.ScoreMax
             });
         }   
 
@@ -109,6 +118,8 @@
             this.MsggError = string.Empty;
 
             var NewGame = this.GameName;
+            var ScoreGame = this.ScoreNew;
+
             if (string.IsNullOrEmpty(NewGame))
             {              
                 this.MsggError = "Ingresar nombre del juego";
@@ -127,7 +138,8 @@
             {
                 var objgame = new Games{
                     Name = NewGame,
-                    Date = DateTime.Now };
+                    Date = DateTime.Now,
+                    ScoreMax = ScoreGame  };
 
                 // Create New Register in BD
                 var response = await this.sqlcon.AddNewReg(objgame);
@@ -143,23 +155,25 @@
                 {
                     Name = NewGame,
                     Date = DateTime.Now,
+                    ScoreMax = ScoreGame
                 });
                 this.Games = new ObservableCollection<GamesItemsModel>(this.ToGamesItemsModel());
                 this.IsVisiblePop = false;
                 this.MsggError = string.Empty;
                 this.GameName = string.Empty;
+                this.ScoreNew =  0;
             }
 
             this.MsggError = string.Empty;
 
         }
 
-        private void ToIsVisiblePop_f()
+        private void ToIsVisiblePop_F()
         {
             this.IsVisiblePop = false;
         }
 
-        private void ToIsVisiblePop_t()
+        private void ToIsVisiblePop_T()
         {
             this.IsVisiblePop = true;
         }
@@ -179,7 +193,7 @@
         {
             get
             {                 
-                return new RelayCommand(ToIsVisiblePop_t);
+                return new RelayCommand(ToIsVisiblePop_T);
             }
         }
 
@@ -196,8 +210,7 @@
         {
             get
             {
-
-                return new RelayCommand(ToIsVisiblePop_f);
+                return new RelayCommand(ToIsVisiblePop_F);
             }
         }
         #endregion

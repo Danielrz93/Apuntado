@@ -73,6 +73,51 @@
             }
         }
 
+        public async Task<Response> DeleteReg<T>(object data)
+        {
+
+            try
+            {
+                var result = con.Delete<T>(data);                
+                return new Response
+                {
+                    IsSuccess = true,
+                    Message = "Registro creado con exito"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = string.Format("Failed to retrieve data. {0}", ex.Message)
+                };
+            }
+            
+        }
+
+        public async Task<Response> DeleteReg(object data)
+        {
+
+            try
+            {
+                var result = con.Delete(data);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Message = "Registro creado con exito"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = string.Format("Failed to retrieve data. {0}", ex.Message)
+                };
+            }
+
+        }
         #endregion
 
 

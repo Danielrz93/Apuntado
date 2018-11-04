@@ -15,5 +15,7 @@
 
             public DateTime Date { get; set; }
 
+            public int ScoreMax { get; set; }
+
     }
 }

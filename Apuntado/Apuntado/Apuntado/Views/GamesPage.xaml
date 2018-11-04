@@ -30,6 +30,9 @@
                                     Padding="6"
                                     BorderColor="Silver"
                                     HasShadow="True">
+                                    <Frame.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GamePlay}"/>
+                                    </Frame.GestureRecognizers>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
@@ -51,8 +54,18 @@
                                             <Label
                                                 FontSize="Medium"
                                                 Text="{Binding Name}"
-                                                TextColor="Black">
+                                                TextColor="Black"
+                                                FontAttributes="Bold">
                                             </Label>
+                                            <StackLayout 
+                                                Orientation="Horizontal">
+                                                <Label
+                                                    Text="Puntaje: ">
+                                                </Label>
+                                                <Label
+                                                    Text="{Binding ScoreMax}">
+                                                </Label>
+                                            </StackLayout>
                                             <StackLayout
                                                 Orientation="Horizontal">
                                                 <Label
@@ -71,6 +84,9 @@
                                             <Image
                                                 WidthRequest="25"
                                                 Source="ic_delete">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding DeleteGame}"/>
+                                                </Image.GestureRecognizers>
                                             </Image>
                                             <Image
                                                 WidthRequest="25"
@@ -97,32 +113,24 @@
                 </Frame.GestureRecognizers>
                 <Image
                     Source="ic_action_naipes"
-                    WidthRequest="45">                    
+                    WidthRequest="45">
                 </Image>
             </Frame>
-            <!--<Button
-                Opacity="0.3"
-                Image="ic_action_naipes"
-                BorderRadius="120"
-                BackgroundColor="DarkRed"
-                Command="{Binding NewGamePop}"
-                AbsoluteLayout.LayoutBounds="0.02,0.98,80,77"
-                AbsoluteLayout.LayoutFlags="PositionProportional">
-            </Button>-->
             <!--Popup Area-->
             <ContentView 
                 BackgroundColor="#C0808080" 
-                Padding="10, 0" 
+                Padding="5, 0" 
                 IsVisible="{Binding IsVisiblePop, Mode=TwoWay}" 
                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                 AbsoluteLayout.LayoutFlags="All">
                 <StackLayout 
-                    VerticalOptions="Center" 
+                    Padding="40"
+                    VerticalOptions="Start" 
                     HorizontalOptions="Center">
                     <StackLayout 
                         Orientation="Vertical" 
-                        HeightRequest="200" 
-                        WidthRequest="300" 
+                        HeightRequest="250" 
+                        WidthRequest="200" 
                         BackgroundColor="White">
                         <Label
                             Text="X"
@@ -134,47 +142,65 @@
                                 Command="{Binding CloseCreate}"/>
                             </Label.GestureRecognizers>
                         </Label>
+                        <Label
+                            Text="Nuevo Juego"
+                            HorizontalOptions="CenterAndExpand"
+                            FontSize="Default"
+                            FontAttributes="Bold"
+                            Margin="2">
+                        </Label>
+                        <Entry
+                            Margin="15,0,15,0"
+                            WidthRequest="5"
+                            Placeholder="Nombre"
+                            Text="{Binding GameName , Mode=TwoWay}">
+                        </Entry>
                         <Entry 
-                        Margin="20,20,20,10" 
-                        Placeholder="Game Name"
-                        Text="{Binding GameName , Mode=TwoWay}">
+                            MaxLength="3"
+                            Margin="15,0,80,0"
+                            WidthRequest="5"
+                            Placeholder="Puntaje"
+                            Text="{Binding ScoreNew , Mode=TwoWay}"
+                            Keyboard="Numeric">
                         </Entry>
                         <Label
-                        Text="{Binding MsggError}"
-                        Margin="6"
-                        TextColor="DarkRed">
+                            Text="{Binding MsggError}"
+                            HorizontalOptions="StartAndExpand"
+                            Margin="5,0,0,0"
+                            TextColor="DarkRed">
                         </Label>
                         <StackLayout
-                        HorizontalOptions="EndAndExpand">
-                            <Grid>
+                            Orientation="Horizontal"
+                            Margin="0 , 10"
+                            Padding="0"
+                            WidthRequest="2">
+                            <!--<Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                                </Grid.ColumnDefinitions>-->
                                 <Label
-                                Grid.Column="0"
-                                Text="Crear"
-                                HorizontalOptions="EndAndExpand"
-                                TextColor="Green"
-                                FontSize="Small">
+                                    Text="Crear"
+                                    HorizontalOptions="EndAndExpand"
+                                    TextColor="Green"
+                                    FontSize="Small">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                         Command="{Binding CreateGame}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
                                 <Label
-                                Grid.Column="1"
-                                Text="Cancelar"
-                                TextColor="Green"
-                                HorizontalOptions="EndAndExpand"
-                                FontSize="Small"
-                                Margin="0,0,20,0">
+                                    Text="Cancelar"
+                                    TextColor="Green"
+                                    HorizontalOptions="EndAndExpand"
+                                    FontSize="Small"
+                                    Margin="0,0,20,0">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                         Command="{Binding CloseCreate}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
-                            </Grid>
+                            <!--</Grid>-->
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

@@ -14,5 +14,7 @@
 
         [MaxLength(50) , Unique]
         public string Namep { get; set; }
+
+        public int Points { get; set; }
     }
 }

@@ -14,7 +14,8 @@
         #endregion
 
         #region ViewModels
-        public GamesViewModel Games { get; set; }
+        public GamesViewModel   Games { get; set; }
+        public GameViewModel    Game { get; set; }
         #endregion
 
         #region Constructor
