@@ -96,8 +96,22 @@
         private void CreateTables()
         {
 
+            // PLayer Table
+            try
+            {
+                //sqlcon.DeleteTable<Players>();
+                sqlcon.CreateTable<Players>();
+            }
+            catch (Exception ex)
+            {
+                
+            }
+           
+
             // Games Table
             sqlcon.CreateTable<Games>();
+
+            
 
         }
 
@@ -123,6 +137,12 @@
             if (string.IsNullOrEmpty(NewGame))
             {              
                 this.MsggError = "Ingresar nombre del juego";
+                return;
+            }
+
+            if (ScoreGame == null || ScoreGame <= 0)
+            {
+                this.MsggError = "El puntaje maximo es obligatorio";
                 return;
             }
 

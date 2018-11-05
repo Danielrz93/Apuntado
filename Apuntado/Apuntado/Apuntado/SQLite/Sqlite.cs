@@ -10,7 +10,6 @@
 
         #region Attributes
         SQLiteConnection con;
-        private object models;
         #endregion
 
         #region Constructor
@@ -24,6 +23,12 @@
         {
             con.CreateTable<T>();
             return;
+        }
+
+        public void DeleteTable<T>()
+        {
+            con.DeleteAll<T>();
+            con.DropTable<T>();
         }
 
         public async Task<Response> GetAllTable<T>() where T: new()
@@ -117,6 +122,47 @@
                 };
             }
 
+        }
+
+        public async Task<Response> GetQuery<T>(string query) where T: new()
+        {
+            //var result = con.Query<T>(query);
+            //return new Response
+            //{
+            //    IsSuccess = true,
+            //    Result = result
+            //};
+
+            try
+            {
+                var result = con.Query<T>(query);
+
+                if (result != null)
+                {
+                    return new Response
+                    {
+                        IsSuccess = true,
+                        Result = result
+                    };
+                }
+                else
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = "No se encontrarón registros"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = string.Format("Failed to retrieve data. {0}", ex.Message)
+                };
+
+            }
         }
         #endregion
 

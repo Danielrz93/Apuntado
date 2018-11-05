@@ -1,12 +1,164 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Apuntado.Views.GamePage">
+             x:Class="Apuntado.Views.GamePage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="{Binding Game.GameSelected.Name}">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <AbsoluteLayout 
+                Padding="0" 
+                BindingContext="{Binding Game}">
+            <StackLayout
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                AbsoluteLayout.LayoutFlags="All">
+                <StackLayout
+                    HeightRequest="60"
+                    BackgroundColor="DarkRed"
+                    Margin="0"
+                    Padding="0">
+                    <StackLayout
+                        BackgroundColor="Transparent"
+                        Orientation="Horizontal">
+                        <Label
+                            FontSize="Large"
+                            FontAttributes="Bold"
+                            Text="Puntaje Maximo"
+                            TextColor="White">
+                        </Label>
+                        <Label
+                            FontAttributes="Italic"
+                            FontSize="Large"
+                            Text="{Binding GameSelected.ScoreMax}"
+                            TextColor="White">
+                        </Label>
+                        <Image
+                            Margin="30,10,0,0"                       
+                            WidthRequest="80"
+                            Source="ic_add_circle_outline"
+                            HorizontalOptions="EndAndExpand">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NewPLayerCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout>
+                    <ListView
+                        BackgroundColor="White"
+                        HasUnevenRows="true"  
+                        IsPullToRefreshEnabled="true"
+                        SeparatorVisibility="None"
+                        ItemsSource="{Binding Players}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Frame
+                                        CornerRadius="3"
+                                        Margin="2"
+                                        Padding="2,10,2,10"
+                                        BorderColor="Silver"
+                                        HasShadow="True">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="4*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image
+                                                Grid.Column="0"
+                                                WidthRequest="30"
+                                                Source="Ficha_poker">
+                                            </Image>
+                                            <StackLayout
+                                                Grid.Column="1"
+                                                Padding="0">
+                                                <Label
+                                                    Margin="0"
+                                                    TextColor="Black"
+                                                    Text="{Binding Namep}"
+                                                    FontAttributes="Bold"
+                                                    FontSize="Medium">
+                                                </Label>
+                                                <Label
+                                                    Margin="0"
+                                                    TextColor="Silver"
+                                                    Text="{Binding Points}"
+                                                    FontAttributes="Bold"
+                                                    FontSize="Medium">
+                                                </Label>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </StackLayout>
+            <!--Popup New User-->
+            <ContentView
+                BackgroundColor="#C0808080" 
+                Padding="5, 0" 
+                IsVisible="{Binding IsVisibleUsr, Mode=TwoWay}"
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
+                AbsoluteLayout.LayoutFlags="All">
+                <StackLayout
+                    Padding="40"
+                    VerticalOptions="Start" 
+                    HorizontalOptions="Center">
+                    <StackLayout
+                        Orientation="Vertical" 
+                        HeightRequest="200" 
+                        WidthRequest="200" 
+                        BackgroundColor="White">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Large"
+                            Text="Usuario Nuevo"
+                            TextColor="Black"
+                            HorizontalOptions="CenterAndExpand">
+                        </Label>
+                        <Entry
+                            Margin="5,5,15,5"
+                            PlaceholderColor="Silver"
+                            Placeholder="Jugador"
+                            Text="{Binding PlayerName}">
+                        </Entry>
+                        <Label
+                            Text="{Binding MsggError}"
+                            HorizontalOptions="StartAndExpand"
+                            Margin="5,0,0,0"
+                            TextColor="DarkRed">
+                        </Label>
+                        <StackLayout
+                            Orientation="Horizontal"
+                            Margin="0 , 10"
+                            Padding="0"
+                            WidthRequest="2">
+                            <Label
+                                Text="Crear"
+                                HorizontalOptions="EndAndExpand"
+                                TextColor="Green"
+                                FontSize="Small">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding CreatePlayer}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label
+                                Text="Cancelar"
+                                TextColor="Green"
+                                HorizontalOptions="EndAndExpand"
+                                FontSize="Small"
+                                Margin="0,0,20,0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding CancelPlayer}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </ContentView>                  
+        </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

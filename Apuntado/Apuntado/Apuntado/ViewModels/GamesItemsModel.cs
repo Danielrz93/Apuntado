@@ -65,8 +65,11 @@
             {
                 IdGame = this.IdGame,
                 Name = this.Name,
-                Date = this.Date
+                Date = this.Date,
+                ScoreMax = this.ScoreMax
             };
+
+            var obj = (Games)this;
 
             var response = await sqlcon.DeleteReg(objdelete);
 
@@ -81,6 +84,7 @@
             else
             {
                 mainViewModel.Games.Games.Remove(this);
+                mainViewModel.GamesList.RemoveAll(g => g.IdGame == this.IdGame);
             }
 
         }
@@ -88,7 +92,7 @@
         private async void GamePlayL()
         {
             MainViewModel.GetInstance().Game = new GameViewModel(this);
-            //await Application.Current.MainPage.Navigation.PushAsync(new LandTabbedPage());
+            await Application.Current.MainPage.Navigation.PushAsync(new GamePage());
         }
         #endregion
     }

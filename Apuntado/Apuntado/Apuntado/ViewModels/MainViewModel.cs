@@ -11,6 +11,12 @@
             get;
             set;
         }
+
+        public List<Players> PlayerList
+        {
+            get;
+            set;
+        }
         #endregion
 
         #region ViewModels
