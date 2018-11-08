@@ -19,6 +19,18 @@
 
         }
 
+        public void Commit_or_Rollback(string action)
+        {
+            if (action == "Commit")
+            {
+                con.Commit();
+            }
+            else if (action == "Rollback")
+            {
+                con.Rollback();
+            }            
+        }
+
         public void CreateTable<T>()
         {
             con.CreateTable<T>();
@@ -126,13 +138,6 @@
 
         public async Task<Response> GetQuery<T>(string query) where T: new()
         {
-            //var result = con.Query<T>(query);
-            //return new Response
-            //{
-            //    IsSuccess = true,
-            //    Result = result
-            //};
-
             try
             {
                 var result = con.Query<T>(query);

@@ -170,9 +170,21 @@
                     return;
                 }
 
-                // Update ObservableCollection                
+                // Update ObservableCollection 
+                // Get key game
+                var strSQL = "SELECT MAX(IdGame) as IdGame FROM Games";
+                var resp = await this.sqlcon.GetQuery<Games>(strSQL);
+                var game_s = (List<Games>)sqlcon.GetQuery<Games>(strSQL).Result.Result;
+
+                if (!resp.IsSuccess)
+                {
+                    this.sqlcon.Commit_or_Rollback("Rollback");
+                    return;
+                } 
+
                 mainViewModel.GamesList.Add(new Games
                 {
+                    IdGame = game_s[0].IdGame,
                     Name = NewGame,
                     Date = DateTime.Now,
                     ScoreMax = ScoreGame

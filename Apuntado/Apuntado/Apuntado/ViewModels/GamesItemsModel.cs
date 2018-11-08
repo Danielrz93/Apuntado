@@ -71,6 +71,7 @@
 
             var obj = (Games)this;
 
+           
             var response = await sqlcon.DeleteReg(objdelete);
 
             if (!response.IsSuccess)
@@ -83,6 +84,10 @@
             }
             else
             {
+                // Delete players of game
+                var strSQL = "DELETE FROM Players WHERE IdGame = '" + this.IdGame + "'";
+                var res = await sqlcon.GetQuery<Players>(strSQL);
+
                 mainViewModel.Games.Games.Remove(this);
                 mainViewModel.GamesList.RemoveAll(g => g.IdGame == this.IdGame);
             }
@@ -92,6 +97,7 @@
         private async void GamePlayL()
         {
             MainViewModel.GetInstance().Game = new GameViewModel(this);
+            var main = MainViewModel.GetInstance();
             await Application.Current.MainPage.Navigation.PushAsync(new GamePage());
         }
         #endregion

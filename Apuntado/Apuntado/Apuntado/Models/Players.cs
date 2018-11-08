@@ -1,10 +1,11 @@
 ﻿namespace Apuntado.Models
 {
+    using Apuntado.ViewModels;
     using global::SQLite;
     using System;
 
     [Table("Players")]
-    public class Players
+    public class Players : BaseViewModel
     {
         [PrimaryKey , AutoIncrement]
         public int IdPLayer { get; set; }

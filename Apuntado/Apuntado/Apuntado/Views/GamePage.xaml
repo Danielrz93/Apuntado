@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Apuntado.Views.GamePage"
-             BindingContext="{Binding Main, Source={StaticResource Locator}}"
-             Title="{Binding Game.GameSelected.Name}">
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Apuntado.Views.GamePage"
+    BindingContext="{Binding Main, Source={StaticResource Locator}}"
+    BackgroundColor="DarkRed"
+    Title="{Binding Game.GameSelected.Name}"
+    ClassId="Game_P">
     <ContentPage.Content>
         <AbsoluteLayout 
                 Padding="0" 
@@ -12,87 +15,128 @@
                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                 AbsoluteLayout.LayoutFlags="All">
                 <StackLayout
-                    HeightRequest="60"
                     BackgroundColor="DarkRed"
-                    Margin="0"
-                    Padding="0">
-                    <StackLayout
-                        BackgroundColor="Transparent"
-                        Orientation="Horizontal">
-                        <Label
-                            FontSize="Large"
-                            FontAttributes="Bold"
-                            Text="Puntaje Maximo"
-                            TextColor="White">
-                        </Label>
-                        <Label
-                            FontAttributes="Italic"
-                            FontSize="Large"
-                            Text="{Binding GameSelected.ScoreMax}"
-                            TextColor="White">
-                        </Label>
-                        <Image
-                            Margin="30,10,0,0"                       
-                            WidthRequest="80"
-                            Source="ic_add_circle_outline"
-                            HorizontalOptions="EndAndExpand">
-                            <Image.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding NewPLayerCommand}"/>
-                            </Image.GestureRecognizers>
-                        </Image>
-                    </StackLayout>
+                    Orientation="Horizontal">
+                    <Label
+                        FontSize="Large"
+                        FontAttributes="Bold"
+                        Text="Puntaje Maximo"
+                        TextColor="White">
+                    </Label>
+                    <Label
+                        FontAttributes="Italic"
+                        FontSize="Large"
+                        Text="{Binding GameSelected.ScoreMax}"
+                        TextColor="White">
+                    </Label>
+                    <Image
+                        Margin="30,10,0,0"                       
+                        WidthRequest="80"
+                        Source="ic_add_circle_outline"
+                        HorizontalOptions="EndAndExpand">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NewPLayerCommand}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
                 </StackLayout>
-                <StackLayout>
-                    <ListView
-                        BackgroundColor="White"
-                        HasUnevenRows="true"  
-                        IsPullToRefreshEnabled="true"
-                        SeparatorVisibility="None"
-                        ItemsSource="{Binding Players}">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Frame
-                                        CornerRadius="3"
-                                        Margin="2"
-                                        Padding="2,10,2,10"
-                                        BorderColor="Silver"
-                                        HasShadow="True">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="4*"/>
-                                            </Grid.ColumnDefinitions>
+                <ListView
+                    BackgroundColor="White"
+                    HasUnevenRows="true"  
+                    IsPullToRefreshEnabled="true"
+                    SeparatorVisibility="None"
+                    ItemsSource="{Binding Players , Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Frame
+                                    CornerRadius="3"
+                                    Margin="2"
+                                    Padding="2,10,2,10"
+                                    BorderColor="Silver"
+                                    HasShadow="True">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="2*"/>
+                                            <ColumnDefinition Width="3*"/>
+                                            <ColumnDefinition Width="4*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image
+                                            Margin="0"
+                                            Grid.Column="0"
+                                            WidthRequest="50"
+                                            Source="Ficha_poker"
+                                            HorizontalOptions="CenterAndExpand"                                            
+                                            Opacity="{Binding IsLose , Mode=TwoWay}">
+                                        </Image>
+                                        <StackLayout
+                                            Grid.Column="1"
+                                            Padding="0"
+                                            Margin="0"
+                                            HorizontalOptions="StartAndExpand">
+                                            <Label
+                                                Margin="0"
+                                                TextColor="Black"
+                                                Text="{Binding Namep}"
+                                                FontAttributes="Bold"                                                
+                                                FontSize="Medium"
+                                                Opacity="{Binding IsLose , Mode=TwoWay}">
+                                            </Label>
+                                            <Label
+                                                Margin="0"
+                                                TextColor="Silver"
+                                                Text="{Binding Points , Mode=TwoWay}"
+                                                FontAttributes="Bold"
+                                                FontSize="Medium"
+                                                Opacity="{Binding IsLose , Mode=TwoWay}">
+                                            </Label>
+                                        </StackLayout>
+                                        <StackLayout
+                                            Padding="4"
+                                            Grid.Column="2"
+                                            Orientation="Horizontal"
+                                            VerticalOptions="Center">
                                             <Image
-                                                Grid.Column="0"
+                                                Source="ic_add_green"
                                                 WidthRequest="30"
-                                                Source="Ficha_poker">
+                                                IsEnabled="{Binding IsEnable_P , Mode=TwoWay}"
+                                                Opacity="{Binding IsLose , Mode=TwoWay}">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding PlusCommand}"/>
+                                                </Image.GestureRecognizers>
                                             </Image>
-                                            <StackLayout
-                                                Grid.Column="1"
-                                                Padding="0">
-                                                <Label
+                                            <Frame
+                                                Padding="0"
+                                                WidthRequest="50"
+                                                BorderColor="Silver"
+                                                CornerRadius="2">
+                                                <Entry
                                                     Margin="0"
-                                                    TextColor="Black"
-                                                    Text="{Binding Namep}"
-                                                    FontAttributes="Bold"
-                                                    FontSize="Medium">
-                                                </Label>
-                                                <Label
-                                                    Margin="0"
-                                                    TextColor="Silver"
-                                                    Text="{Binding Points}"
-                                                    FontAttributes="Bold"
-                                                    FontSize="Medium">
-                                                </Label>
-                                            </StackLayout>
-                                        </Grid>
-                                    </Frame>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackLayout>
+                                                    MaxLength="3"
+                                                    Keyboard="Numeric"
+                                                    IsEnabled="{Binding IsEnable_P , Mode=TwoWay}"
+                                                    Text="{Binding Ponits_A , Mode=TwoWay}"
+                                                    WidthRequest="40"
+                                                    HorizontalOptions="Center">
+                                                </Entry>
+                                            </Frame>
+                                            <Image
+                                                WidthRequest="30"
+                                                Source="ic_remove"
+                                                IsEnabled="{Binding IsEnable_P , Mode=TwoWay}"
+                                                Opacity="{Binding IsLose , Mode=TwoWay}">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer                                                        
+                                                        Command="{Binding RestCommand}"/>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
             <!--Popup New User-->
             <ContentView
@@ -121,6 +165,7 @@
                             Margin="5,5,15,5"
                             PlaceholderColor="Silver"
                             Placeholder="Jugador"
+                            MaxLength="15"
                             Text="{Binding PlayerName}">
                         </Entry>
                         <Label

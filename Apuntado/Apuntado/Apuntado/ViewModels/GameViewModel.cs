@@ -18,20 +18,27 @@
         private string playerName;
         private string msggError;
         private Sqlite sqlCon;
+        private int ponits_A;
+        private bool isEnable_P;
+        private double isLose;
         #endregion
 
         #region Properties
         public ObservableCollection<GameItemsViewModel> Players
         {
-            get { return this.players;  }
+            get { return this.players; }
             set { SetValue(ref this.players, value); }
         }
         public Games GameSelected
         {
-            get  
+            get
             {
                 return this.gameSelected;
-            }     
+            }
+            set
+            {
+                this.gameSelected = value;
+            }
         }
         public string PlayerName
         {
@@ -46,15 +53,30 @@
         public bool IsVisibleUsr
         {
             get { return this.isVisibleUsr; }
-            set { SetValue(ref this.isVisibleUsr, value);  }
-            
+            set { SetValue(ref this.isVisibleUsr, value); }
+
+        }
+        public int Ponits_A
+        {
+            get { return this.ponits_A; }
+            set { SetValue(ref this.ponits_A, value); }
+        }
+        public bool IsEnable_P
+        {
+            get { return this.isEnable_P; }
+            set { SetValue(ref this.isEnable_P, value); }
+        }
+        public double IsLose
+        {
+            get { return this.isLose; }
+            set { SetValue(ref this.isLose, value); }
         }
         #endregion
 
         #region Constructor
         public GameViewModel(Games game)
         {
-            this.gameSelected = game;
+            this.GameSelected = game;
             this.IsVisibleUsr = false;
             this.sqlCon = MainViewModel.GetInstance().Games.sqlcon;
 
@@ -88,7 +110,6 @@
                 return new RelayCommand(NewPlayerPop_F);
             }
         }
-
         #endregion
 
         #region Methods
@@ -160,25 +181,28 @@
             else
             {
                 mainViewModel.PlayerList.Add(objPlayer);
-                var ItemPlayer = new GameItemsViewModel
+
+                var ItemPlayer = new GameItemsViewModel(this.GameSelected)
                 {
                     IdGame = this.GameSelected.IdGame,
                     Namep = this.PlayerName.ToUpper()
                 };
                 this.Players.Add(ItemPlayer);
-                
-                this.IsVisibleUsr = false;
+
+                this.PlayerName = string.Empty;                
                 this.MsggError = string.Empty;
-                this.PlayerName = string.Empty;
+                this.IsVisibleUsr = false;
+
             }
         }
 
         private IEnumerable<GameItemsViewModel> ToPlayersItemsModel()
         {
             // Transformar la lista Games a GamesItemsModel que hereda Games del Model
-            return MainViewModel.GetInstance().PlayerList.Select(g => new GameItemsViewModel
+            return MainViewModel.GetInstance().PlayerList.Select(g => new GameItemsViewModel(this.GameSelected)
             {                
                 IdGame = g.IdGame,
+                IdPLayer = g.IdPLayer,
                 Namep  = g.Namep,
                 Points = g.Points
             });
