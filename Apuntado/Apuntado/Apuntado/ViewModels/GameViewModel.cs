@@ -8,6 +8,7 @@
     using System.Windows.Input;
     using System.Collections.ObjectModel;
     using System.Collections.Generic;
+    using Xamarin.Forms;
 
     public class GameViewModel : BaseViewModel
     {
@@ -21,6 +22,8 @@
         private int ponits_A;
         private bool isEnable_P;
         private double isLose;
+        private List<GameItemsViewModel> selectd;
+        private object isSelectD;
         #endregion
 
         #region Properties
@@ -71,6 +74,11 @@
             get { return this.isLose; }
             set { SetValue(ref this.isLose, value); }
         }
+        public object IsSelectD
+        {
+            get { return this.isSelectD; }
+            set { SetValue(ref this.isSelectD, value); }
+        }
         #endregion
 
         #region Constructor
@@ -94,6 +102,15 @@
             }
 
         }
+
+        public ICommand DeletePLayerCommand
+        {
+            get
+            {
+                return new RelayCommand(DeletePLayer);
+            }
+
+        }        
 
         public ICommand CreatePlayer
         {
@@ -142,8 +159,7 @@
         private async void NewPLayer()
         {
 
-            MainViewModel mainViewModel = MainViewModel.GetInstance();
-
+            MainViewModel mainViewModel = MainViewModel.GetInstance();            
             // Same Name
             if (string.IsNullOrEmpty(this.PlayerName))
             {
@@ -154,7 +170,9 @@
 
             if (mainViewModel.PlayerList != null)
             {
-                var player_in = mainViewModel.PlayerList.Where(p => p.Namep == this.PlayerName).FirstOrDefault();
+                var player_in = mainViewModel.PlayerList.Where(
+                                                    p => p.Namep.ToUpper() == this.PlayerName.ToUpper()).
+                                                    FirstOrDefault();
 
                 if (player_in != null)
                 {
@@ -194,6 +212,60 @@
                 this.IsVisibleUsr = false;
 
             }
+        }
+
+        private async void DeletePLayer()
+        {
+            // get player selected
+
+            var player_d = (GameItemsViewModel)this.IsSelectD;                
+
+            if (player_d == null)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                            "Jugador no seleccionado",
+                            "No se selecciono ningún jugador para eliminar",
+                            "Aceptar");
+                return;
+            }             
+    
+            var action = await Application.Current.MainPage.DisplayAlert(
+                            "Eliminar jugador",
+                            "Desea eliminar el jugador " + player_d.Namep + " Seleccionado",
+                            "Si",
+                            "Cancelar");
+
+            if (!action)
+            {
+                return;
+            }
+
+            // Delete player in BD
+            var mainViewModel = MainViewModel.GetInstance();
+            var sqlcon = mainViewModel.Games.sqlcon;
+
+            var player_delete = new Players
+            {
+                IdGame = player_d.IdGame,
+                IdPLayer = player_d.IdPLayer
+            };
+
+            var response = await sqlCon.DeleteReg(player_delete);
+
+            if (!response.IsSuccess)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                            "Error",
+                            response.Message,
+                            "Aceptar");
+            }
+            else
+            {
+                mainViewModel.PlayerList.Remove(player_delete);
+                mainViewModel.Game.Players.Remove(player_d);
+            }
+
+
         }
 
         private IEnumerable<GameItemsViewModel> ToPlayersItemsModel()

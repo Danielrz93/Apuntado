@@ -4,47 +4,60 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Apuntado.Views.GamePage"
     BindingContext="{Binding Main, Source={StaticResource Locator}}"
-    BackgroundColor="DarkRed"
     Title="{Binding Game.GameSelected.Name}"
     ClassId="Game_P">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Icon="ic_add_circle_outline"
+            Command="{Binding Game.NewPLayerCommand}"/>
+        <ToolbarItem
+            Icon="ic_delete_outline"
+            Command="{Binding Game.DeletePLayerCommand}"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <AbsoluteLayout 
                 Padding="0" 
                 BindingContext="{Binding Game}">
             <StackLayout
                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
-                AbsoluteLayout.LayoutFlags="All">
-                <StackLayout
-                    BackgroundColor="DarkRed"
-                    Orientation="Horizontal">
-                    <Label
-                        FontSize="Large"
-                        FontAttributes="Bold"
-                        Text="Puntaje Maximo"
-                        TextColor="White">
-                    </Label>
-                    <Label
-                        FontAttributes="Italic"
-                        FontSize="Large"
-                        Text="{Binding GameSelected.ScoreMax}"
-                        TextColor="White">
-                    </Label>
-                    <Image
-                        Margin="30,10,0,0"                       
-                        WidthRequest="80"
-                        Source="ic_add_circle_outline"
-                        HorizontalOptions="EndAndExpand">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding NewPLayerCommand}"/>
-                        </Image.GestureRecognizers>
-                    </Image>
-                </StackLayout>
+                AbsoluteLayout.LayoutFlags="All"
+                BackgroundColor="White">
+                <!--<Frame
+                    BackgroundColor="White"
+                    Opacity="0.7"
+                    HasShadow="True">-->
+                    <StackLayout                        
+                        Orientation="Horizontal"
+                        VerticalOptions="Start"
+                        HeightRequest="25"
+                        BackgroundColor="White">
+                        <Label
+                            Margin="5,0,0,0"
+                            FontSize="Small"
+                            FontAttributes="Bold"
+                            Text="Puntaje Maximo"
+                            TextColor="DarkRed"
+                            HorizontalOptions="StartAndExpand"
+                            VerticalOptions="EndAndExpand">
+                        </Label>
+                        <Label
+                            Margin="0"
+                            FontAttributes="Italic"
+                            FontSize="Small"
+                            Text="{Binding GameSelected.ScoreMax}"
+                            TextColor="DarkRed"
+                            HorizontalOptions="StartAndExpand"
+                            VerticalOptions="EndAndExpand">
+                        </Label>
+                    </StackLayout>
+                <!--</Frame>-->
                 <ListView
                     BackgroundColor="White"
                     HasUnevenRows="true"  
-                    IsPullToRefreshEnabled="true"
                     SeparatorVisibility="None"
-                    ItemsSource="{Binding Players , Mode=TwoWay}">
+                    ItemsSource="{Binding Players , Mode=TwoWay}"
+                    Footer="Lista de Jugadores"
+                    SelectedItem="{Binding IsSelectD}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -95,7 +108,8 @@
                                             Padding="4"
                                             Grid.Column="2"
                                             Orientation="Horizontal"
-                                            VerticalOptions="Center">
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="CenterAndExpand">
                                             <Image
                                                 Source="ic_add_green"
                                                 WidthRequest="30"
@@ -126,8 +140,33 @@
                                                 IsEnabled="{Binding IsEnable_P , Mode=TwoWay}"
                                                 Opacity="{Binding IsLose , Mode=TwoWay}">
                                                 <Image.GestureRecognizers>
-                                                    <TapGestureRecognizer                                                        
+                                                    <TapGestureRecognizer  
                                                         Command="{Binding RestCommand}"/>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                        </StackLayout>
+                                        <StackLayout
+                                            Grid.Column="3"
+                                            Orientation="Vertical"
+                                            HorizontalOptions="CenterAndExpand">
+                                            <Image
+                                                Source="ic_keyboard_return"
+                                                IsEnabled="{Binding IsEnable_R , Mode=TwoWay}"
+                                                Opacity="{Binding IsReturn , Mode=TwoWay}"
+                                                WidthRequest="35">
+                                                <Image.GestureRecognizers>
+                                                <TapGestureRecognizer                                                        
+                                                            Command="{Binding ReturnGame}"/>
+                                                </Image.GestureRecognizers> 
+                                            </Image>
+                                            <Image
+                                                Source="win_game"
+                                                IsEnabled="{Binding IsEnable_P , Mode=TwoWay}"
+                                                Opacity="{Binding IsLose , Mode=TwoWay}"
+                                                WidthRequest="35">
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer                                                        
+                                                            Command="{Binding WinMatch}"/>
                                                 </Image.GestureRecognizers>
                                             </Image>
                                         </StackLayout>
@@ -149,60 +188,66 @@
                     Padding="40"
                     VerticalOptions="Start" 
                     HorizontalOptions="Center">
-                    <StackLayout
-                        Orientation="Vertical" 
-                        HeightRequest="200" 
-                        WidthRequest="200" 
+                    <Frame
+                        CornerRadius="3"
+                        BorderColor="Silver"
+                        HasShadow="True"
                         BackgroundColor="White">
-                        <Label
-                            FontAttributes="Bold"
-                            FontSize="Large"
-                            Text="Usuario Nuevo"
-                            TextColor="Black"
-                            HorizontalOptions="CenterAndExpand">
-                        </Label>
-                        <Entry
-                            Margin="5,5,15,5"
-                            PlaceholderColor="Silver"
-                            Placeholder="Jugador"
-                            MaxLength="15"
-                            Text="{Binding PlayerName}">
-                        </Entry>
-                        <Label
-                            Text="{Binding MsggError}"
-                            HorizontalOptions="StartAndExpand"
-                            Margin="5,0,0,0"
-                            TextColor="DarkRed">
-                        </Label>
                         <StackLayout
-                            Orientation="Horizontal"
-                            Margin="0 , 10"
-                            Padding="0"
-                            WidthRequest="2">
+                            Orientation="Vertical" 
+                            HeightRequest="170" 
+                            WidthRequest="200" 
+                            BackgroundColor="White">
                             <Label
-                                Text="Crear"
-                                HorizontalOptions="EndAndExpand"
-                                TextColor="Green"
-                                FontSize="Small">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding CreatePlayer}"/>
-                                </Label.GestureRecognizers>
+                                FontAttributes="Bold"
+                                FontSize="Large"
+                                Text="Usuario Nuevo"
+                                TextColor="Black"
+                                HorizontalOptions="CenterAndExpand">
                             </Label>
+                            <Entry
+                                Margin="5,5,15,5"
+                                PlaceholderColor="Silver"
+                                Placeholder="Jugador"
+                                MaxLength="15"
+                                Text="{Binding PlayerName , Mode=TwoWay}">
+                            </Entry>
                             <Label
-                                Text="Cancelar"
-                                TextColor="Green"
-                                HorizontalOptions="EndAndExpand"
-                                FontSize="Small"
-                                Margin="0,0,20,0">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer 
-                                        Command="{Binding CancelPlayer}"/>
-                                </Label.GestureRecognizers>
+                                Text="{Binding MsggError , Mode=TwoWay}"
+                                HorizontalOptions="StartAndExpand"
+                                Margin="5,0,0,0"
+                                TextColor="DarkRed">
                             </Label>
+                            <StackLayout
+                                Orientation="Horizontal"
+                                Margin="0 , 10"
+                                Padding="0"
+                                WidthRequest="2">
+                                <Label
+                                    Text="Crear"
+                                    HorizontalOptions="EndAndExpand"
+                                    TextColor="Green"
+                                    FontSize="Small">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding CreatePlayer}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label
+                                    Text="Cancelar"
+                                    TextColor="Green"
+                                    HorizontalOptions="EndAndExpand"
+                                    FontSize="Small"
+                                    Margin="0,0,20,0">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            Command="{Binding CancelPlayer}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
                         </StackLayout>
-                    </StackLayout>
-                </StackLayout>
+                    </Frame>
+                </StackLayout>                
             </ContentView>                  
         </AbsoluteLayout>
     </ContentPage.Content>

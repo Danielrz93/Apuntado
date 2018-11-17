@@ -10,7 +10,7 @@ namespace Apuntado.Views
 	{
 		public GamePage ()
 		{
-			InitializeComponent ();
+            InitializeComponent ();
 		}
     }
 }

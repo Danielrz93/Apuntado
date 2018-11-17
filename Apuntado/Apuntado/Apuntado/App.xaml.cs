@@ -13,7 +13,10 @@ namespace Apuntado
 
             //MainPage = new MainPage();
 
-            MainPage = new NavigationPage(new GamesPage());
+            MainPage = new NavigationPage(new GamesPage())
+            {
+                BarBackgroundColor = Color.FromHex("#8b0000")               
+            };
 		}
 
 		protected override void OnStart ()
