@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Apuntado.Views.GamesPage"
     BindingContext="{Binding Main, Source={StaticResource Locator}}"
-    BackgroundColor="DarkRed"     
+    BackgroundColor="White"     
     Title="Apuntado">
     <ContentPage.Content>
         <AbsoluteLayout 
@@ -14,7 +14,7 @@
                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1" 
                 AbsoluteLayout.LayoutFlags="All">
                 <ListView
-                    BackgroundColor="White"
+                    BackgroundColor="Transparent"
                     HasUnevenRows="true"  
                     IsPullToRefreshEnabled="true"
                     IsRefreshing="{Binding IsRefreshing, Mode=TwoWay}"
@@ -102,7 +102,7 @@
                 </ListView>                
             </StackLayout>
             <Frame
-                AbsoluteLayout.LayoutBounds="0.02,0.98,80,77"
+                AbsoluteLayout.LayoutBounds="0.02,0.98,65,65"
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 BackgroundColor="DarkRed"
                 BorderColor="Transparent"
@@ -113,11 +113,11 @@
                 </Frame.GestureRecognizers>
                 <Image
                     Source="ic_action_naipes"
-                    WidthRequest="45">
+                    WidthRequest="30">
                 </Image>
             </Frame>
             <!--Popup Area-->
-            <ContentView 
+            <!--<ContentView 
                 BackgroundColor="#C0808080" 
                 Padding="5, 0" 
                 IsVisible="{Binding IsVisiblePop, Mode=TwoWay}" 
@@ -174,11 +174,11 @@
                             Margin="0 , 10"
                             Padding="0"
                             WidthRequest="2">
-                            <!--<Grid>
+                            --><!--<Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>-->
+                                </Grid.ColumnDefinitions>--><!--
                                 <Label
                                     Text="Crear"
                                     HorizontalOptions="EndAndExpand"
@@ -200,11 +200,11 @@
                                         Command="{Binding CloseCreate}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
-                            <!--</Grid>-->
+                            --><!--</Grid>--><!--
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
-            </ContentView>
+            </ContentView>-->
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

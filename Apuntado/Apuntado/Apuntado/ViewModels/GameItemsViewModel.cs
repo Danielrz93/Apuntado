@@ -189,11 +189,23 @@
 
         private void ReturnPlayer()
         {
+            int scoremax;
             // Validate score max
             var ListP = mainViewModel.Game.Players.Where<GameItemsViewModel>(
                                                            p => p.IdPLayer != this.IdPLayer);
+
+            var cantPlayer = ListP.Count<GameItemsViewModel>();
+
+            if (cantPlayer <= 0)
+            {
+                scoremax = this.GameSelected.ScoreMax - 1;
+            }
+            else
+            {
+                scoremax = ListP.Max<GameItemsViewModel>(p => p.Points);
+            }
+
             
-            var scoremax = ListP.Max<GameItemsViewModel>(p => p.Points);
 
             // Update score player 
             var index = mainViewModel.PlayerList.FindIndex(
