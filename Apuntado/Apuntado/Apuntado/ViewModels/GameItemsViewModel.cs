@@ -1,5 +1,6 @@
 ﻿namespace Apuntado.ViewModels
 {
+    using Apuntado.SQLite;
     using GalaSoft.MvvmLight.Command;
     using Models;
     using System;
@@ -7,6 +8,7 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Windows.Input;
     using Xamarin.Forms;
@@ -22,6 +24,7 @@
         private Games gameSelected;
         private bool isEnable_R;
         private double isReturn;
+        public Sqlite sqlcon;
         #endregion
 
         #region Properties
@@ -64,12 +67,26 @@
         #endregion
 
         #region Constructor
-        public GameItemsViewModel(Games game)
+        public GameItemsViewModel(Games game , Players player)
         {
             this.GameSelected = game;
             mainViewModel = MainViewModel.GetInstance();
 
-            Validate_State(this.Points);
+            // Connection to DB
+            string dbPath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+                        "Apuntado.db3");
+
+            sqlcon = new Sqlite(dbPath);
+
+            if (player != null)
+            {
+                Validate_State(player.Points);
+            }
+            else
+            {
+                Validate_State(0);
+            }            
         }       
         #endregion
 
@@ -118,19 +135,27 @@
             // Save BD
             var sqlCon = mainViewModel.Games.sqlcon;
 
-            var objPlayer = new Players
-            {
-                IdGame = this.IdGame
-            };
-
             var index = mainViewModel.PlayerList.FindIndex(
                                                     p => p.IdGame == this.IdGame &&
                                                          p.IdPLayer == this.IdPLayer);
             // Update score player 
             mainViewModel.Game.Players.RemoveAt(index);
             this.Points = score_t;
-            mainViewModel.Game.Players.Insert(index , this);
+            mainViewModel.Game.Players.Insert(index , this);            
+
+            // Guardar resultado 
+            var objPlayer = new Players
+            {
+                IdGame   = this.IdGame,
+                IdPLayer = this.IdPLayer, 
+                Namep    = this.Namep,
+                Points   = this.Points
+            };
+            var resp = await this.sqlcon.Update<Players>(objPlayer);
             this.Ponits_A = 0;
+
+            // Validate score
+            Validate_State(score_t);
         }
 
         private async void PlusVlaue()
@@ -150,6 +175,17 @@
             mainViewModel.Game.Players.RemoveAt(index);
             this.Points = score_t;
             mainViewModel.Game.Players.Insert(index, this);
+
+            // Save result
+            // Guardar resultado 
+            var objPlayer = new Players
+            {
+                IdGame = this.IdGame,
+                IdPLayer = this.IdPLayer,
+                Namep = this.Namep,
+                Points = this.Points
+            };
+            var resp = await this.sqlcon.Update<Players>(objPlayer);
             this.Ponits_A = 0;
 
             // Validate score
@@ -187,12 +223,13 @@
             this.IsReturn = 0.3;
         }
 
-        private void ReturnPlayer()
+        private async void ReturnPlayer()
         {
             int scoremax;
             // Validate score max
             var ListP = mainViewModel.Game.Players.Where<GameItemsViewModel>(
-                                                           p => p.IdPLayer != this.IdPLayer);
+                                                           p => p.IdPLayer != this.IdPLayer &&
+                                                                p.Points   < this.GameSelected.ScoreMax );
 
             var cantPlayer = ListP.Count<GameItemsViewModel>();
 
@@ -205,23 +242,28 @@
                 scoremax = ListP.Max<GameItemsViewModel>(p => p.Points);
             }
 
-            
-
             // Update score player 
             var index = mainViewModel.PlayerList.FindIndex(
                                                     p => p.IdGame == this.IdGame &&
-                                                         p.IdPLayer == this.IdPLayer);
+                                                         p.IdPLayer == this.IdPLayer );
 
             mainViewModel.Game.Players.RemoveAt(index);
             this.Points = scoremax;
             mainViewModel.Game.Players.Insert(index, this);
+
+            // Save result
+            // Guardar resultado 
+            var objPlayer = new Players
+            {
+                IdGame = this.IdGame,
+                IdPLayer = this.IdPLayer,
+                Namep = this.Namep,
+                Points = this.Points
+            };
+            var resp = await this.sqlcon.Update<Players>(objPlayer);
             this.Ponits_A = 0;
 
             this.Validate_State(scoremax);
-
-            //Debugger.Break();
-
-
         }
 
         private async void PlayerWins()
@@ -243,6 +285,7 @@
             this.RestValue();
             this.Ponits_A = 0;
         }
+       
         #endregion
     }
 }

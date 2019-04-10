@@ -169,6 +169,27 @@
 
             }
         }
+        
+        public async Task<Response> Update<T>(object data)
+        {
+            try
+            {
+                var result = con.Update(data);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Message = "Resgistro actualizado con exito"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = string.Format("Failed to retrieve data. {0}", ex.Message)
+                };
+            }
+        }
         #endregion
 
 

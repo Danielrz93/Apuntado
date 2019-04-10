@@ -117,7 +117,7 @@
                 </Image>
             </Frame>
             <!--Popup Area-->
-            <!--<ContentView 
+            <ContentView 
                 BackgroundColor="#C0808080" 
                 Padding="5, 0" 
                 IsVisible="{Binding IsVisiblePop, Mode=TwoWay}" 
@@ -174,16 +174,17 @@
                             Margin="0 , 10"
                             Padding="0"
                             WidthRequest="2">
-                            --><!--<Grid>
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>--><!--
+                                </Grid.ColumnDefinitions>
                                 <Label
                                     Text="Crear"
                                     HorizontalOptions="EndAndExpand"
                                     TextColor="Green"
-                                    FontSize="Small">
+                                    FontSize="Small"
+                                    Grid.Column="0">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                         Command="{Binding CreateGame}"/>
@@ -194,17 +195,18 @@
                                     TextColor="Green"
                                     HorizontalOptions="EndAndExpand"
                                     FontSize="Small"
-                                    Margin="0,0,20,0">
+                                    Margin="2,0,20,0"
+                                    Grid.Column="1">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer 
                                         Command="{Binding CloseCreate}"/>
                                     </Label.GestureRecognizers>
                                 </Label>
-                            --><!--</Grid>--><!--
+                            </Grid>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
-            </ContentView>-->
+            </ContentView>
         </AbsoluteLayout>
     </ContentPage.Content>
 </ContentPage>

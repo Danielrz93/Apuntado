@@ -198,11 +198,30 @@
             }
             else
             {
+                // Consultar numero generado
+                // Get key game
+                var strSQL = "SELECT MAX(IdPLayer) as IdPLayer FROM Players";
+                var resp = await this.sqlCon.GetQuery<Players>(strSQL);
+                var game_s = (List<Players>)sqlCon.GetQuery<Players>(strSQL).Result.Result;
+                var Points = 0;
+                try
+                {
+                    Points = game_s[0].IdPLayer;
+                    objPlayer.IdPLayer = game_s[0].IdPLayer;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+               
+
                 mainViewModel.PlayerList.Add(objPlayer);
 
-                var ItemPlayer = new GameItemsViewModel(this.GameSelected)
+                var ItemPlayer = new GameItemsViewModel(this.GameSelected , null)
                 {
                     IdGame = this.GameSelected.IdGame,
+                    IdPLayer = Points, 
                     Namep = this.PlayerName.ToUpper()
                 };
                 this.Players.Add(ItemPlayer);
@@ -271,7 +290,7 @@
         private IEnumerable<GameItemsViewModel> ToPlayersItemsModel()
         {
             // Transformar la lista Games a GamesItemsModel que hereda Games del Model
-            return MainViewModel.GetInstance().PlayerList.Select(g => new GameItemsViewModel(this.GameSelected)
+            return MainViewModel.GetInstance().PlayerList.Select(g => new GameItemsViewModel(this.GameSelected , g )
             {                
                 IdGame = g.IdGame,
                 IdPLayer = g.IdPLayer,
